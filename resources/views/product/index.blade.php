@@ -14,7 +14,7 @@
     <div class="card mb-4">
         <div class="card-header">
             {{-- <i class=""></i> --}}
-            <a href="" class="btn btn-sm btn-primary">Add New Product</a>
+            <a href="{{ route('index.create') }}" class="btn btn-sm btn-primary">Add New Product</a>
         </div>
         <div class="card-body">
             <table id="datatablesSimple">
@@ -53,27 +53,50 @@
                         <td>{{ $item->buy_price }}</td>
                         <td>
                             @empty($item->image)
-                            <img 
+                            <img
                                 src="{{url('image/nophoto.jpg')}}"
                                 alt="product-image"
                                 class="rounded"
-                                style="width: 100%; max-width: 100px; height: auto;"
-                            >
+                                style="width: 100%; max-width: 100px; height: auto;">
                             @else
-                            <img 
+                            <img
                                 src="{{url('image')}}/{{$item->image}}"
                                 alt="product-image"
                                 class="rounded"
-                                style="width: 100%; max-width: 100px; height: auto;"
-                            >
+                                style="width: 100%; max-width: 100px; height: auto;">
                             @endempty
                         </td>
                         <td>
                             <a href="" class="btn btn-sm btn-secondary">show</a>
-                            <a href="" class="btn btn-sm btn-warning">edit</a>
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal{{$item->id}}">
-                                hapus
+                            <a href="{{ route('index.edit', $item->id) }}" class="btn btn-sm btn-warning">edit</a>
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{$item->id}}">
+                                delete
                             </button>
+
+                            <!-- Modal Delete -->
+                            <div class="modal fade" id="deleteModal{{$item->id}}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="deleteModalLabel">Hapus Produk</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure to delete {{$item->nama}}?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                            <form action="{{ route('index.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
